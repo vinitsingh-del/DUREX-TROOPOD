@@ -394,6 +394,17 @@
       mix-blend-mode: screen;
     }
 
+    .hero-media-shell.has-video {
+      width: min(42rem, 88vw);
+      aspect-ratio: 1126 / 720;
+      background: #071342;
+    }
+
+    .hero-media-shell.has-video::before,
+    .hero-media-shell.has-video::after {
+      display: none;
+    }
+
     .hero-media-shell::after {
       content: "";
       position: absolute;
@@ -418,8 +429,11 @@
       will-change: transform;
     }
 
-    .hero-video {
+    .product-shot.hero-video {
       background: linear-gradient(135deg, rgba(0, 198, 188, 0.95), rgba(82, 230, 188, 0.92));
+      object-fit: contain;
+      object-position: center;
+      transform: none !important;
     }
 
     .hero-image-caption {
@@ -1466,6 +1480,10 @@
         border-radius: 1.25rem;
       }
 
+      .hero-media-shell.has-video {
+        width: min(25rem, 90vw);
+      }
+
       .hero-image-caption {
         left: 0.7rem;
         right: 0.7rem;
@@ -1614,14 +1632,10 @@
         <div class="hero-stage" aria-label="Durex Play Wild Wand product visual">
           <div class="product-orbit">
             <div class="halo" aria-hidden="true"></div>
-            <div class="hero-media-shell">
+            <div class="hero-media-shell has-video">
               <video class="product-shot hero-video" poster="assets/wild-wand-hero-ergonomic.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Durex Play Wild Wand light-on parallax product video">
                 <source src="assets/wild-wand-hero-light-on.mp4" type="video/mp4">
               </video>
-              <div class="hero-image-caption" aria-hidden="true">
-                <span>Light-on grip</span>
-                <span>Sweet spot ready</span>
-              </div>
             </div>
             <div class="float-tag one">7<br>vibes</div>
             <div class="float-tag two">100%<br>wet ready</div>
