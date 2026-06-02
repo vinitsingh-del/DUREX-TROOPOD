@@ -882,8 +882,11 @@
 
     .mode-card img {
       position: absolute;
-      inset: auto -5% 0 auto;
-      width: min(20rem, 84%);
+      inset: auto 0.85rem 0.85rem auto;
+      width: min(18rem, 72%);
+      max-height: 11.5rem;
+      object-fit: contain;
+      object-position: right bottom;
       opacity: 0.92;
       filter: drop-shadow(0 1.4rem 1rem rgba(0, 0, 0, 0.32));
     }
@@ -1479,6 +1482,11 @@
         transform: none !important;
       }
 
+      .mode-card img {
+        width: min(18rem, 68%);
+        max-height: 10.5rem;
+      }
+
       .gallery {
         grid-template-columns: 1fr;
       }
@@ -1701,7 +1709,7 @@
         <div class="hero-stage" aria-label="Durex Play Wild Wand product visual">
           <div class="product-orbit has-video-orbit">
             <div class="halo" aria-hidden="true"></div>
-            <div class="hero-media-shell has-video">
+            <div class="hero-media-shell has-video js-haptic">
               <video class="product-shot hero-video" poster="assets/wild-wand-hero-ergonomic.jpg" muted loop playsinline preload="metadata" aria-label="Durex Play Wild Wand light-on parallax product video">
                 <source src="assets/wild-wand-hero-light-on.mp4" type="video/mp4">
               </video>
@@ -1726,7 +1734,7 @@
             </div>
           </div>
 
-          <div class="how-card" aria-label="Animated Wild Wand how it works product frames">
+          <div class="how-card js-haptic" aria-label="Animated Wild Wand how it works product frames">
             <img class="motion-frame" src="assets/wild-wand-hero-ergonomic.jpg" alt="Durex Wild Wand ergonomic grip frame" loading="lazy" decoding="async">
             <img class="motion-frame" src="assets/banner_1_92708bc0-5966-47f9-b2bc-390e1dab79a0.webp" alt="Durex Wild Wand press and hold frame" loading="lazy" decoding="async">
             <img class="motion-frame" src="assets/banner_3_84e6b366-d08a-4041-b190-fd1dc6107551.webp" alt="Durex Wild Wand double mode frame" loading="lazy" decoding="async">
@@ -1759,20 +1767,20 @@
         </div>
 
         <div class="mode-grid">
-          <article class="mode-card" style="--tone: var(--acid);">
+          <article class="mode-card js-haptic" style="--tone: var(--acid);">
             <strong>3x</strong>
             <span>Sensational tapping modes for rhythm, tease, and surprise.</span>
-            <img src="assets/1_37879527-ffdb-4e3b-bd5c-9c21a09042b6.webp" alt="Wild Wand mode detail" loading="lazy" decoding="async">
+            <img src="assets/banner_1_92708bc0-5966-47f9-b2bc-390e1dab79a0.webp" alt="Wild Wand tapping button detail" loading="lazy" decoding="async">
           </article>
-          <article class="mode-card" style="--tone: var(--mint);">
+          <article class="mode-card js-haptic" style="--tone: var(--mint);">
             <strong>7x</strong>
             <span>Vibration settings that move from subtle spark to full-volume buzz.</span>
-            <img src="assets/2_486df116-b482-496e-a352-62e66b54967e.webp" alt="Wild Wand vibration detail" loading="lazy" decoding="async">
+            <img src="assets/banner_3_84e6b366-d08a-4041-b190-fd1dc6107551.webp" alt="Wild Wand vibration mode detail" loading="lazy" decoding="async">
           </article>
-          <article class="mode-card" style="--tone: var(--coral);">
+          <article class="mode-card js-haptic" style="--tone: var(--coral);">
             <strong>45</strong>
             <span>Minutes of play after charging, with waterproof confidence built in.</span>
-            <img src="assets/3_12_1d39a484-9c0d-4ebb-8f82-901945ae931a.webp" alt="Wild Wand waterproof detail" loading="lazy" decoding="async">
+            <img src="assets/banner_2_95ea13c8-59bf-4a20-98ea-c12b70c8b12e.webp" alt="Wild Wand duration and modes detail" loading="lazy" decoding="async">
           </article>
         </div>
       </section>
@@ -1815,14 +1823,6 @@
             </div>
             <a class="primary-cta js-buy-cta" href="https://www.durexindia.com/products/durex-play-wild-wand" aria-label="Buy Durex Play Wild Wand on Durex India">Buy on Durex India</a>
           </aside>
-        </div>
-      </section>
-
-      <section class="immersive">
-        <img src="assets/banner_1_92708bc0-5966-47f9-b2bc-390e1dab79a0.webp" alt="Wild Wand color burst" loading="lazy" decoding="async">
-        <div class="immersive-copy">
-          <h2>Waterproof. Pocket-sized. Unapologetic.</h2>
-          <p>A little charge, a lot of range, and a design that does not flinch when things get wet.</p>
         </div>
       </section>
 
@@ -1976,12 +1976,12 @@
       quantity.textContent = Math.min(9, Number(quantity.textContent) + 1);
     });
 
-    document.querySelectorAll(".js-buy-cta").forEach((cta) => {
-      cta.addEventListener("click", () => {
+    document.querySelectorAll(".js-buy-cta, .js-haptic").forEach((target) => {
+      target.addEventListener("pointerdown", () => {
         if ("vibrate" in navigator) {
-          navigator.vibrate([30, 20, 30]);
+          navigator.vibrate([24, 18, 24]);
         }
-      });
+      }, { passive: true });
     });
   </script>
 </body>
