@@ -346,6 +346,11 @@
       will-change: transform;
     }
 
+    .product-orbit.has-video-orbit .halo,
+    .product-orbit.has-video-orbit .float-tag {
+      display: none;
+    }
+
     .halo {
       position: absolute;
       width: min(35rem, 78vw);
@@ -398,6 +403,8 @@
       width: min(42rem, 88vw);
       aspect-ratio: 1126 / 720;
       background: #071342;
+      border: 0;
+      box-shadow: 0 2.1rem 3.6rem rgba(0, 0, 0, 0.32);
     }
 
     .hero-media-shell.has-video::before,
@@ -780,6 +787,15 @@
       min-height: 28rem;
       object-fit: cover;
       transform: scale(1.08) translateY(calc(var(--scroll) * -0.035px));
+    }
+
+    .scroll-shake {
+      animation: scroll-shake 0.58s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .scrolling .scroll-shake {
+      animation-play-state: running;
     }
 
     .wave-copy h2,
@@ -1175,6 +1191,12 @@
       -webkit-backdrop-filter: blur(24px) saturate(1.45);
     }
 
+    .hero-video-in-view .footer-buy {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(1rem);
+    }
+
     .footer-buy::before {
       content: "";
       position: absolute;
@@ -1283,6 +1305,21 @@
       }
       80% {
         transform: translate3d(0.8px, -0.6px, 0) rotate(0.5deg);
+      }
+    }
+
+    @keyframes scroll-shake {
+      0%, 100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate3d(-0.18rem, 0.08rem, 0) rotate(-0.45deg);
+      }
+      50% {
+        transform: translate3d(0.16rem, -0.08rem, 0) rotate(0.45deg);
+      }
+      75% {
+        transform: translate3d(-0.08rem, 0.06rem, 0) rotate(-0.25deg);
       }
     }
 
@@ -1480,12 +1517,12 @@
       }
 
       .hero-stage {
-        min-height: 13.4rem;
-        margin-bottom: 6.2rem;
+        min-height: 18.4rem;
+        margin-bottom: 4.6rem;
       }
 
       .scroll-pulse {
-        bottom: 6rem;
+        bottom: 4.8rem;
         width: 2.55rem;
       }
 
@@ -1500,8 +1537,12 @@
       }
 
       .hero-media-shell.has-video {
-        width: min(17.5rem, 78vw);
-        max-height: 11.2rem;
+        width: min(23.75rem, 92vw);
+        max-height: none;
+      }
+
+      .footer-buy {
+        transition: opacity 180ms ease, transform 180ms ease;
       }
 
       .hero-image-caption {
@@ -1658,10 +1699,10 @@
         </div>
 
         <div class="hero-stage" aria-label="Durex Play Wild Wand product visual">
-          <div class="product-orbit">
+          <div class="product-orbit has-video-orbit">
             <div class="halo" aria-hidden="true"></div>
             <div class="hero-media-shell has-video">
-              <video class="product-shot hero-video" poster="assets/wild-wand-hero-ergonomic.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Durex Play Wild Wand light-on parallax product video">
+              <video class="product-shot hero-video" poster="assets/wild-wand-hero-ergonomic.jpg" muted loop playsinline preload="metadata" aria-label="Durex Play Wild Wand light-on parallax product video">
                 <source src="assets/wild-wand-hero-light-on.mp4" type="video/mp4">
               </video>
             </div>
@@ -1702,7 +1743,7 @@
       <section class="wave-band">
         <div class="wave-inner">
           <div class="banner-window">
-            <img src="assets/banner_2_95ea13c8-59bf-4a20-98ea-c12b70c8b12e.webp" alt="Wild Wand lifestyle banner" loading="lazy" decoding="async">
+            <img class="scroll-shake" src="assets/banner_2_95ea13c8-59bf-4a20-98ea-c12b70c8b12e.webp" alt="Wild Wand lifestyle banner" loading="lazy" decoding="async">
           </div>
           <div class="wave-copy">
             <h2>Small wand. Big main-character energy.</h2>
@@ -1827,6 +1868,26 @@
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let scrollFrame = 0;
     let lastScrollY = window.scrollY || 0;
+    let scrollShakeTimer = 0;
+    let userHasScrolled = false;
+    let initialScrollSettled = false;
+    let heroVideo;
+
+    const isMostlyVisible = (element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.top < window.innerHeight * 0.78 && rect.bottom > window.innerHeight * 0.18;
+    };
+
+    const updateHeroVideoState = () => {
+      if (!heroVideo) return;
+      const visible = isMostlyVisible(heroVideo);
+      document.body.classList.toggle("hero-video-in-view", visible);
+      if (visible && userHasScrolled && !prefersReducedMotion) {
+        heroVideo.play().catch(() => {});
+      } else {
+        heroVideo.pause();
+      }
+    };
 
     const paintScroll = () => {
       scrollFrame = 0;
@@ -1835,10 +1896,19 @@
       root.style.setProperty("--scroll", y.toFixed(2));
       root.style.setProperty("--scroll-progress", Math.min(1, y / max).toFixed(4));
       root.style.setProperty("--hero-media-y", `${Math.max(-34, Math.min(16, y * -0.035))}px`);
+      updateHeroVideoState();
     };
 
     const updateScroll = () => {
       lastScrollY = window.scrollY || 0;
+      if (initialScrollSettled) {
+        userHasScrolled = true;
+      }
+      document.body.classList.add("scrolling");
+      window.clearTimeout(scrollShakeTimer);
+      scrollShakeTimer = window.setTimeout(() => {
+        document.body.classList.remove("scrolling");
+      }, 260);
       if (!scrollFrame) {
         scrollFrame = window.requestAnimationFrame(paintScroll);
       }
@@ -1858,7 +1928,30 @@
     window.addEventListener("scroll", updateScroll, { passive: true });
     window.addEventListener("resize", updateScroll, { passive: true });
     window.addEventListener("pointermove", updatePointer, { passive: true });
+    window.setTimeout(() => {
+      initialScrollSettled = true;
+    }, 900);
     paintScroll();
+
+    heroVideo = document.querySelector(".hero-video");
+    if (heroVideo) {
+      heroVideo.pause();
+      heroVideo.currentTime = 0;
+      if ("IntersectionObserver" in window) {
+        const heroVideoObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            document.body.classList.toggle("hero-video-in-view", entry.isIntersecting);
+            updateHeroVideoState();
+          });
+        }, { threshold: 0.42 });
+        heroVideoObserver.observe(heroVideo);
+      } else {
+        window.addEventListener("scroll", () => {
+          updateHeroVideoState();
+        }, { passive: true });
+      }
+      updateHeroVideoState();
+    }
 
     const galleryImage = document.querySelector("#galleryImage");
     const thumbs = document.querySelectorAll(".thumb");
