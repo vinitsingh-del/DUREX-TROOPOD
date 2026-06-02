@@ -18,6 +18,8 @@
       --scroll: 0;
       --hero-tilt-x: 0deg;
       --hero-tilt-y: 0deg;
+      --hero-media-x: 0px;
+      --hero-media-y: 0px;
     }
 
     * {
@@ -365,14 +367,66 @@
       background: #071342;
     }
 
-    .product-shot {
+    .hero-media-shell {
       position: relative;
       z-index: 2;
       width: min(35rem, 82vw);
-      border-radius: 2rem;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      border-radius: 1.65rem;
+      background: linear-gradient(135deg, rgba(0, 203, 184, 0.95), rgba(4, 116, 198, 0.95));
+      box-shadow: 0 2.4rem 4rem rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.28);
       filter: drop-shadow(0 3rem 3rem rgba(0, 0, 0, 0.38));
-      transform: translateZ(5rem) rotate(calc(var(--scroll) * -0.012deg));
+      transform: translate3d(var(--hero-media-x), var(--hero-media-y), 5rem) rotate(calc(var(--scroll) * -0.01deg));
       will-change: transform;
+    }
+
+    .hero-media-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 74% 26%, rgba(215, 255, 63, 0.2), transparent 14rem),
+        linear-gradient(180deg, transparent 56%, rgba(0, 0, 0, 0.2));
+      mix-blend-mode: screen;
+    }
+
+    .product-shot {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 56% 50%;
+      transform: scale(1.045) translate3d(calc(var(--hero-media-x) * -0.18), calc(var(--hero-media-y) * -0.18), 0);
+      will-change: transform;
+    }
+
+    .hero-image-caption {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      padding: 0.7rem 0.82rem;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(0, 38, 88, 0.28);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .hero-image-caption span:last-child {
+      color: var(--acid);
     }
 
     .float-tag {
@@ -827,7 +881,7 @@
 
     .footer-buy {
       position: fixed;
-      left: clamp(0.75rem, 3vw, 2rem);
+      left: auto;
       right: clamp(0.75rem, 3vw, 2rem);
       bottom: max(0.75rem, env(safe-area-inset-bottom));
       z-index: 18;
@@ -835,8 +889,8 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      width: min(62rem, calc(100% - clamp(1.5rem, 6vw, 4rem)));
-      margin-inline: auto;
+      width: min(34rem, calc(100% - clamp(1.5rem, 6vw, 4rem)));
+      margin-left: auto;
       padding: 0.8rem 0.9rem 0.8rem 1.1rem;
       overflow: hidden;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(3, 16, 52, 0.62));
@@ -1025,8 +1079,21 @@
       }
 
       .product-shot {
+        transform: scale(1.035);
+      }
+
+      .hero-media-shell {
         width: min(24rem, 86vw);
         transform: translateZ(3rem);
+        border-radius: 1.25rem;
+      }
+
+      .hero-image-caption {
+        left: 0.7rem;
+        right: 0.7rem;
+        bottom: 0.7rem;
+        padding: 0.62rem 0.68rem;
+        font-size: 0.66rem;
       }
 
       .halo {
@@ -1126,7 +1193,13 @@
         <div class="hero-stage" aria-label="Durex Play Wild Wand product visual">
           <div class="product-orbit">
             <div class="halo" aria-hidden="true"></div>
-            <img class="product-shot" src="assets/2_f8cf325c-bcb5-4000-9b30-7fae2f9b1a24.webp" alt="Durex Play Wild Wand product pack" fetchpriority="high" decoding="async">
+            <div class="hero-media-shell">
+              <img class="product-shot" src="assets/wild-wand-hero-ergonomic.jpg" alt="Durex Play Wild Wand ergonomic hand-held product image" fetchpriority="high" decoding="async">
+              <div class="hero-image-caption" aria-hidden="true">
+                <span>Ergonomic grip</span>
+                <span>Sweet spot ready</span>
+              </div>
+            </div>
             <div class="float-tag one">7<br>vibes</div>
             <div class="float-tag two">100%<br>wet ready</div>
           </div>
@@ -1268,6 +1341,7 @@
       const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
       root.style.setProperty("--scroll", y.toFixed(2));
       root.style.setProperty("--scroll-progress", Math.min(1, y / max).toFixed(4));
+      root.style.setProperty("--hero-media-y", `${Math.max(-34, Math.min(16, y * -0.035))}px`);
     };
 
     const updateScroll = () => {
@@ -1285,6 +1359,7 @@
       root.style.setProperty("--y", `${event.clientY}px`);
       root.style.setProperty("--hero-tilt-y", `${(x - 0.5) * 11}deg`);
       root.style.setProperty("--hero-tilt-x", `${(0.5 - y) * 9}deg`);
+      root.style.setProperty("--hero-media-x", `${(x - 0.5) * 18}px`);
     };
 
     window.addEventListener("scroll", updateScroll, { passive: true });
