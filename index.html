@@ -1399,6 +1399,7 @@
 
       .how-copy {
         max-width: none;
+        order: 2;
       }
 
       .features,
@@ -1499,9 +1500,10 @@
       }
 
       .how-card {
-        --motion-top: 3.6rem;
-        --motion-bottom: 12rem;
-        --motion-side: 0.62rem;
+        --motion-top: 4.25rem;
+        --motion-bottom: 5.25rem;
+        --motion-side: 0.72rem;
+        order: 1;
         min-height: 24rem;
         transform: none;
       }
@@ -1511,8 +1513,15 @@
         right: var(--motion-side);
         bottom: var(--motion-bottom);
         left: var(--motion-side);
-        width: calc(100% - 1.24rem);
+        width: calc(100% - (var(--motion-side) * 2));
         height: calc(100% - var(--motion-top) - var(--motion-bottom));
+      }
+
+      .vibration-rings {
+        top: 4.7rem;
+        right: 1rem;
+        width: 5.6rem;
+        opacity: 0.48;
       }
 
       .how-step {
@@ -1525,7 +1534,7 @@
         top: 0.72rem;
         bottom: auto;
         padding: 0.65rem 0.74rem;
-        font-size: 0.67rem;
+        font-size: 0.72rem;
       }
 
       .float-tag {
