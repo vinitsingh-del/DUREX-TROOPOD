@@ -481,6 +481,59 @@
       display: none;
     }
 
+    .hero-media-shell.clean-product {
+      width: min(35rem, 82vw);
+      overflow: visible;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      filter: none;
+      transform: translate3d(var(--hero-media-x), var(--hero-media-y), 5rem) rotate(calc(-4deg + var(--scroll) * -0.012deg));
+    }
+
+    .hero-media-shell.clean-product::before,
+    .hero-media-shell.clean-product::after {
+      display: none;
+    }
+
+    .hero-product-stack {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-origin: center;
+      will-change: transform;
+    }
+
+    .hero-product-card {
+      position: absolute;
+      inset: 7% 6% 2% 11%;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 1.3rem;
+      background: transparent;
+      box-shadow: 0 1.7rem 3rem rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-product-card.secondary {
+      inset: 3% 17% 12% 0;
+      opacity: 0.72;
+      transform: translate3d(-2.6rem, 1.2rem, -1rem) rotate(-12deg) scale(0.72);
+      transform-origin: center;
+    }
+
+    .hero-product-card.primary {
+      transform: translate3d(2rem, -0.4rem, 0) rotate(7deg);
+    }
+
+    .hero-product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.01);
+    }
+
     .hero-media-shell::after {
       content: "";
       position: absolute;
@@ -640,6 +693,46 @@
     .story-gallery {
       display: grid;
       gap: 1rem;
+    }
+
+    .story-video-showcase {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin: 0 0 clamp(1.2rem, 3vw, 2rem);
+      pointer-events: none;
+    }
+
+    .story-video-frame {
+      position: relative;
+      z-index: 2;
+      width: min(47rem, 100%);
+      overflow: hidden;
+      border-radius: clamp(1.15rem, 3vw, 2.25rem);
+      background: transparent;
+      box-shadow: none;
+      filter: none;
+      opacity: 1;
+      pointer-events: auto;
+      isolation: isolate;
+    }
+
+    .story-video-frame video {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1126 / 720;
+      object-fit: contain;
+      object-position: center;
+      background: transparent;
+      filter: none;
+      opacity: 1;
+      mix-blend-mode: normal;
+      transform: none !important;
     }
 
     .story-tabs {
@@ -1636,6 +1729,14 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
+      .story-video-showcase {
+        margin-bottom: 1rem;
+      }
+
+      .story-video-frame {
+        width: min(42rem, 100%);
+      }
+
       .story-preview {
         min-height: auto;
       }
@@ -1717,8 +1818,34 @@
         font-size: clamp(3.7rem, 19vw, 7rem);
       }
 
+      .hero-controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+        gap: 0.8rem;
+        margin-top: 1.3rem;
+      }
+
+      .price-pill,
+      .primary-cta,
+      .ghost-cta {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .price-pill {
+        flex-wrap: wrap;
+        row-gap: 0.25rem;
+        border-radius: 1.25rem;
+      }
+
+      .price-pill strong {
+        font-size: clamp(1.55rem, 10vw, 2.25rem);
+      }
+
       .hero-stage {
         min-height: 18.4rem;
+        margin-top: 1.2rem;
         margin-bottom: 4.6rem;
       }
 
@@ -1735,6 +1862,26 @@
         width: min(24rem, 86vw);
         transform: translateZ(3rem);
         border-radius: 1.25rem;
+      }
+
+      .hero-media-shell.clean-product {
+        width: min(22rem, 88vw);
+        aspect-ratio: 1;
+        transform: translateZ(3rem) rotate(-2deg);
+      }
+
+      .hero-product-card {
+        inset: 5% 5% 4% 6%;
+        border-radius: 1.05rem;
+      }
+
+      .hero-product-card.primary {
+        transform: translate3d(0.7rem, -0.1rem, 0) rotate(5deg);
+      }
+
+      .hero-product-card.secondary {
+        inset: 8% 18% 13% 0;
+        transform: translate3d(-1.1rem, 0.8rem, -1rem) rotate(-10deg) scale(0.7);
       }
 
       .hero-media-shell.has-video {
@@ -1801,6 +1948,15 @@
       .story-card {
         flex: 0 0 min(18rem, 78vw);
         scroll-snap-align: start;
+      }
+
+      .story-video-showcase {
+        margin-inline: 0;
+      }
+
+      .story-video-frame {
+        width: 100%;
+        border-radius: 1.15rem;
       }
 
       .story-preview {
@@ -1930,12 +2086,17 @@
         </div>
 
         <div class="hero-stage" aria-label="Durex Play Wild Wand product visual">
-          <div class="product-orbit has-video-orbit">
+          <div class="product-orbit">
             <div class="halo" aria-hidden="true"></div>
-            <div class="hero-media-shell has-video js-haptic">
-              <video class="product-shot hero-video" poster="assets/wild-wand-hero-ergonomic.jpg" muted loop playsinline preload="metadata" aria-label="Durex Play Wild Wand light-on parallax product video">
-                <source src="assets/wild-wand-hero-light-on.mp4" type="video/mp4">
-              </video>
+            <div class="hero-media-shell clean-product js-haptic" aria-label="Clean Durex Play Wild Wand product images">
+              <div class="hero-product-stack scroll-shake">
+                <figure class="hero-product-card secondary" aria-hidden="true">
+                  <img src="assets/wild-wand-clean-angle.png" alt="" width="1530" height="1710" decoding="async">
+                </figure>
+                <figure class="hero-product-card primary">
+                  <img src="assets/wild-wand-clean-front.png" alt="Clean Durex Play Wild Wand product image" width="1530" height="1710" decoding="async">
+                </figure>
+              </div>
             </div>
             <div class="float-tag one">7<br>vibes</div>
             <div class="float-tag two">100%<br>wet ready</div>
@@ -1952,6 +2113,14 @@
               <h2>See the wand, then work it.</h2>
             </div>
             <p>Tap the product cards to explore the Wild Wand frames. The big preview keeps each image intact, while the steps below make the mode flow easy to scan on mobile.</p>
+          </div>
+
+          <div class="story-video-showcase" aria-label="Durex Play Wild Wand product video">
+            <div class="story-video-frame js-haptic">
+              <video class="hero-video" poster="assets/wild-wand-hero-ergonomic.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Durex Play Wild Wand light-on product video">
+                <source src="assets/wild-wand-hero-light-on.mp4" type="video/mp4">
+              </video>
+            </div>
           </div>
 
           <div class="story-gallery js-haptic" aria-label="Durex Play Wild Wand product story gallery">
@@ -2150,7 +2319,7 @@
       if (!heroVideo) return;
       const visible = isMostlyVisible(heroVideo);
       document.body.classList.toggle("hero-video-in-view", visible);
-      if (visible && userHasScrolled && !prefersReducedMotion) {
+      if (visible && !prefersReducedMotion) {
         heroVideo.play().catch(() => {});
       } else {
         heroVideo.pause();
@@ -2205,7 +2374,7 @@
 
     heroVideo = document.querySelector(".hero-video");
     if (heroVideo) {
-      heroVideo.pause();
+      heroVideo.muted = true;
       heroVideo.currentTime = 0;
       if ("IntersectionObserver" in window) {
         const heroVideoObserver = new IntersectionObserver((entries) => {
